@@ -13,28 +13,33 @@ import org.example.expert.domain.user.enums.UserRole;
 @Table(name = "users")
 public class User extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+    private String nickName;
 
-    public User(String email, String password, UserRole userRole) {
+    public User(String email, String password, UserRole userRole, String nickName) {
         this.email = email;
         this.password = password;
         this.userRole = userRole;
+        this.nickName = nickName;
     }
 
-    private User(Long id, String email, UserRole userRole) {
+    private User(Long id, String email, UserRole userRole, String nickName) {
         this.id = id;
         this.email = email;
         this.userRole = userRole;
+        this.nickName = nickName;
     }
 
+
     public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole());
+        return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole(), authUser.getNickName());
     }
 
     public void changePassword(String password) {

@@ -27,3 +27,4 @@ public class AuthController {
         return authService.signin(signinRequest);
     }
 }
+

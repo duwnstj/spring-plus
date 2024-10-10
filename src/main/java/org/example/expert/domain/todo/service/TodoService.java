@@ -7,6 +7,7 @@ import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponseDto;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -90,5 +91,20 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         );
+    }
+
+    // 일정 검색하는 기능
+
+    public Page<TodoSearchResponseDto> searchTodos(int page, int size, String title, LocalDateTime startDate, LocalDateTime endDate, String managerNickname) {
+        Pageable pageable = PageRequest.of(page-1,size);
+
+        if(title != null){
+            return todoRepository.searchTitle(pageable,title);
+        }else if(startDate!=null || endDate != null){
+            return todoRepository.searchCreateAt(pageable, startDate,endDate);
+        } else if (managerNickname != null) {
+            return todoRepository.searchManagers(pageable,managerNickname);
+        }
+        return null;
     }
 }
